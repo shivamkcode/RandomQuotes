@@ -5,19 +5,14 @@ const Quote = () => {
     const [quote, setQuote] = React.useState('')
     const [displayedQuote, setDisplayedQuote] = React.useState('');
 
-    // const fetchFirstQuote = async () => {
-    //     const response = await axios.get('https://api.adviceslip.com/advice');
-    //     setQuote(response.data.slip.advice);
-    //     // displayQuoteWithDelay(response.data.slip.advice);
-    // }
     const fetchQuote = async () => {
         const response = await axios.get('https://api.adviceslip.com/advice');
-        setQuote(response.data.slip.advice);
-        const display = async() => await displayQuoteWithDelay(response.data.slip.advice);
-        display()
-        return response.data.slip.advice
-    }
+        const advice = response.data.slip.advice
+        setQuote(advice);
 
+        const display = async () => await displayQuoteWithDelay(advice);
+        display()
+    }
 
     const speakQuote = (quote) => {
         if ('speechSynthesis' in window) {
@@ -31,14 +26,6 @@ const Quote = () => {
             console.error('Speech synthesis not supported');
         }
     }
-    React.useEffect(() => {
-        const fetchData = async () => {
-            await fetchQuote();
-        };
-        fetchData();
-        speakQuote()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     const displayQuoteWithDelay = async (quote) => {
         const words = quote.split(' ');
@@ -46,6 +33,7 @@ const Quote = () => {
             setDisplayedQuote(words.slice(0, i + 1).join(' '));
             await new Promise((resolve) => setTimeout(resolve, 200));
         }
+        console.log(quote)
         speakQuote(quote);
     };
 
@@ -54,6 +42,11 @@ const Quote = () => {
         setDisplayedQuote('');
         fetchQuote();
     };
+
+    React.useEffect(() => {
+        handleNewQuote()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
     return (
         <div className='app'>
