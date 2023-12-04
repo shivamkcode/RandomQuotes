@@ -4,15 +4,22 @@ import axios from 'axios'
 const Quote = () => {
     const [quote, setQuote] = React.useState('')
     const [displayedQuote, setDisplayedQuote] = React.useState('');
-//   const [currentCharIndex, setCurrentCharIndex] = React.useState(0);
+    //   const [currentCharIndex, setCurrentCharIndex] = React.useState(0);
+
+    const fetchFirstQuote = async () => {
+        const response = await axios.get('https://api.adviceslip.com/advice');
+        setQuote(response.data.slip.advice);
+        // displayQuoteWithDelay(response.data.slip.advice);
+    }
 
     const fetchQuote = async () => {
         const response = await axios.get('https://api.adviceslip.com/advice');
         setQuote(response.data.slip.advice);
         displayQuoteWithDelay(response.data.slip.advice);
     }
-    
-    const speakQuote = (quote) =>{
+
+
+    const speakQuote = (quote) => {
         if ('speechSynthesis' in window) {
             const speech = new SpeechSynthesisUtterance(quote);
             speech.lang = 'en-US';
@@ -24,29 +31,29 @@ const Quote = () => {
             console.error('Speech synthesis not supported');
         }
     }
-    // React.useEffect(() => {
-        
-    // }, [])
-    
+    React.useEffect(() => {
+        fetchFirstQuote()
+    }, [])
+
     const displayQuoteWithDelay = async () => {
         const words = quote.split(' ');
         for (let i = 0; i < words.length; i++) {
-          setDisplayedQuote(words.slice(0, i + 1).join(' '));
-          await new Promise((resolve) => setTimeout(resolve, 200));
+            setDisplayedQuote(words.slice(0, i + 1).join(' '));
+            await new Promise((resolve) => setTimeout(resolve, 200));
         }
         speakQuote(quote);
-      };
-    
-      const handleNewQuote = () => {
+    };
+
+    const handleNewQuote = () => {
         setQuote('');
         setDisplayedQuote('');
         fetchQuote();
-      };
-    
+    };
+
     return (
         <div className='app'>
             <div className='random-quote'>
-                <h2 className='quote-text' >{displayedQuote}</h2>
+                <h2 className='quote-text' >{displayedQuote === '' ? quote : displayedQuote}</h2>
                 <button onClick={handleNewQuote}>New Quote</button>
             </div>
         </div>
