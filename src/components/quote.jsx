@@ -15,6 +15,7 @@ const Quote = () => {
         const response = await axios.get('https://api.adviceslip.com/advice');
         setQuote(response.data.slip.advice);
         displayQuoteWithDelay(response.data.slip.advice);
+        return response.data.slip.advice
     }
 
 
@@ -31,8 +32,9 @@ const Quote = () => {
         }
     }
     React.useEffect(() => {
+        const quotes = fetchQuote()
         fetchQuote()
-        speakQuote()
+        speakQuote(quotes)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
