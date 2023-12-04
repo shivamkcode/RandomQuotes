@@ -10,11 +10,11 @@ const Quote = () => {
     //     setQuote(response.data.slip.advice);
     //     // displayQuoteWithDelay(response.data.slip.advice);
     // }
-
     const fetchQuote = async () => {
         const response = await axios.get('https://api.adviceslip.com/advice');
         setQuote(response.data.slip.advice);
-        displayQuoteWithDelay(response.data.slip.advice);
+        const display = async() => await displayQuoteWithDelay(response.data.slip.advice);
+        display()
         return response.data.slip.advice
     }
 
@@ -32,11 +32,13 @@ const Quote = () => {
         }
     }
     React.useEffect(() => {
-        const quotes = fetchQuote()
-        fetchQuote()
-        speakQuote(quotes)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        const fetchData = async () => {
+            await fetchQuote();
+        };
+        fetchData();
+        speakQuote()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const displayQuoteWithDelay = async (quote) => {
         const words = quote.split(' ');
