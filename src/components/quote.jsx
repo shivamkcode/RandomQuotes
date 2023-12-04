@@ -4,13 +4,12 @@ import axios from 'axios'
 const Quote = () => {
     const [quote, setQuote] = React.useState('')
     const [displayedQuote, setDisplayedQuote] = React.useState('');
-    //   const [currentCharIndex, setCurrentCharIndex] = React.useState(0);
 
-    const fetchFirstQuote = async () => {
-        const response = await axios.get('https://api.adviceslip.com/advice');
-        setQuote(response.data.slip.advice);
-        // displayQuoteWithDelay(response.data.slip.advice);
-    }
+    // const fetchFirstQuote = async () => {
+    //     const response = await axios.get('https://api.adviceslip.com/advice');
+    //     setQuote(response.data.slip.advice);
+    //     // displayQuoteWithDelay(response.data.slip.advice);
+    // }
 
     const fetchQuote = async () => {
         const response = await axios.get('https://api.adviceslip.com/advice');
@@ -32,10 +31,12 @@ const Quote = () => {
         }
     }
     React.useEffect(() => {
-        fetchFirstQuote()
+        fetchQuote()
+        speakQuote()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const displayQuoteWithDelay = async () => {
+    const displayQuoteWithDelay = async (quote) => {
         const words = quote.split(' ');
         for (let i = 0; i < words.length; i++) {
             setDisplayedQuote(words.slice(0, i + 1).join(' '));
