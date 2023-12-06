@@ -9,38 +9,24 @@ const Quote = () => {
         const response = await axios.get('https://api.adviceslip.com/advice');
         const advice = response.data.slip.advice
         setQuote(advice);
-
+        
         const display = async () => await displayQuoteWithDelay(advice);
         display()
-
-        speakQuote(quote);
+        
+        speakQuote(advice);
 
     }
-
-    // const speakQuote = (quote) => {
-    //     if ('speechSynthesis' in window) {
-    //         const speech = new SpeechSynthesisUtterance(quote);
-    //         speech.lang = 'en-US';
-    //         speech.volume = 1;
-    //         speech.rate = 1;
-    //         speech.pitch = 1;
-    //         window.speechSynthesis.speak(speech);
-    //     } else {
-    //         console.error('Speech synthesis not supported');
-    //     }
-    // }
 
     const speakQuote = (quote) => {
         const speak = () => {
             if ('speechSynthesis' in window) {
-                // Stop any ongoing speech
                 window.speechSynthesis.cancel();
     
                 const speech = new SpeechSynthesisUtterance(quote);
                 speech.lang = 'en-US';
                 speech.volume = 1;
                 speech.rate = 1;
-                speech.pitch = 1.5;
+                speech.pitch = 2;
                 window.speechSynthesis.speak(speech);
             } else {
                 console.error('Speech synthesis not supported');
@@ -65,8 +51,6 @@ const Quote = () => {
             setDisplayedQuote(words.slice(0, i + 1).join(' '));
             await new Promise((resolve) => setTimeout(resolve, 200));
         }
-        // console.log(quote)
-        // speakQuote(quote);
     };
 
     const handleNewQuote = () => {
