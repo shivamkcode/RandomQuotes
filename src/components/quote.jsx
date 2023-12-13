@@ -12,22 +12,58 @@ const Quote = () => {
         return advice;
     }
 
+    // const speakQuote = (quote) => {
+    //     const speak = () => {
+    //         if ('speechSynthesis' in window) {
+    //             window.speechSynthesis.cancel();
+    
+    //             const speech = new SpeechSynthesisUtterance(quote);
+    //             speech.lang = 'en-US';
+    //             speech.volume = 1;
+    //             speech.rate = 1;
+    //             speech.pitch = 2;
+    //             window.speechSynthesis.speak(speech);
+    //         } else {
+    //             console.error('Speech synthesis not supported');
+    //         }
+    //     }
+    
+    //     if (window.speechSynthesis !== undefined) {
+    //         speak();
+    //     } else {
+    //         const id = setInterval(() => {
+    //             if (window.speechSynthesis !== undefined) {
+    //                 speak();
+    //                 clearInterval(id);
+    //             }
+    //         }, 10);
+    //     }
+    // }
+
     const speakQuote = (quote) => {
         const speak = () => {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-    
+        
                 const speech = new SpeechSynthesisUtterance(quote);
                 speech.lang = 'en-US';
                 speech.volume = 1;
                 speech.rate = 1;
                 speech.pitch = 2;
+    
+                // Get the list of voices available
+                let voices = window.speechSynthesis.getVoices();
+    
+                // Choose a voice. Here we're choosing the first available voice.
+                // You can choose a different voice by changing the index.
+                speech.voice = voices[3]; 
+    
                 window.speechSynthesis.speak(speech);
             } else {
                 console.error('Speech synthesis not supported');
             }
         }
-    
+        
         if (window.speechSynthesis !== undefined) {
             speak();
         } else {
@@ -39,8 +75,9 @@ const Quote = () => {
             }, 10);
         }
     }
-
     
+
+
     const displayQuoteWithDelay = async (quote) => {
         const words = quote.split(' ');
         for (let i = 0; i < words.length; i++) {
