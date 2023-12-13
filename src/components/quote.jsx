@@ -32,6 +32,8 @@ const Quote = () => {
         });
     }; 
 
+    
+
     React.useEffect(() => {
         handleNewQuote()
     },[])
