@@ -1,17 +1,43 @@
-import React from 'react';
-import axios from 'axios';
-import { useSpeechSynthesis } from 'react-speech-kit';
+import React from 'react'
+import axios from 'axios'
 
 const Quote = () => {
     const [quote, setQuote] = React.useState('')
     const [displayedQuote, setDisplayedQuote] = React.useState('');
-    const { speak, voices } = useSpeechSynthesis();
 
     const fetchQuote = async () => {
         const response = await axios.get('https://api.adviceslip.com/advice');
         const advice = response.data.slip.advice
         setQuote(advice);
         return advice;
+    }
+
+    const speakQuote = (quote) => {
+        const speak = () => {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+    
+                const speech = new SpeechSynthesisUtterance(quote);
+                speech.lang = 'en-US';
+                speech.volume = 1;
+                speech.rate = 1;
+                speech.pitch = 2;
+                window.speechSynthesis.speak(speech);
+            } else {
+                console.error('Speech synthesis not supported');
+            }
+        }
+    
+        if (window.speechSynthesis !== undefined) {
+            speak();
+        } else {
+            const id = setInterval(() => {
+                if (window.speechSynthesis !== undefined) {
+                    speak();
+                    clearInterval(id);
+                }
+            }, 10);
+        }
     }
 
     const displayQuoteWithDelay = async (quote) => {
@@ -28,11 +54,9 @@ const Quote = () => {
         fetchQuote().then(advice => {
             const display = async () => await displayQuoteWithDelay(advice);
             display()
-            speak({ text: advice, voice: voices[1] }); // Change the index to use a different voice. Try above 10
+            speakQuote(advice);
         });
     }; 
-
-    
 
     React.useEffect(() => {
         handleNewQuote()
