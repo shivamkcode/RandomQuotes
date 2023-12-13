@@ -5,7 +5,7 @@ import { useSpeechSynthesis } from 'react-speech-kit';
 const Quote = () => {
     const [quote, setQuote] = React.useState('')
     const [displayedQuote, setDisplayedQuote] = React.useState('');
-    const { speak } = useSpeechSynthesis();
+    const { speak, voices } = useSpeechSynthesis();
 
     const fetchQuote = async () => {
         const response = await axios.get('https://api.adviceslip.com/advice');
@@ -28,7 +28,7 @@ const Quote = () => {
         fetchQuote().then(advice => {
             const display = async () => await displayQuoteWithDelay(advice);
             display()
-            speak({ text: advice });
+            speak({ text: advice, voice: voices[1] }); // Change the index to use a different voice
         });
     }; 
 
