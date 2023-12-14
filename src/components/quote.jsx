@@ -56,7 +56,7 @@ const Quote = () => {
     
                 // Choose a voice. Here we're choosing the first available voice.
                 // You can choose a different voice by changing the index.
-                speech.voice = voices[3]; 
+                speech.voice = voices[1]; 
     
                 window.speechSynthesis.speak(speech);
             } else {
